@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+    image: registry.gitlab.com/dayn08/mytestwebsite
+    container_name: test-website
+    ports:
+      - "80:80"
