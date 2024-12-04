@@ -2,4 +2,4 @@
 FROM nginx:alpine
 
 # Copy all files from the current directory to the NGINX web root
-COPY . /usr/share/nginx/html/
+COPY ./web /usr/share/nginx/html/
