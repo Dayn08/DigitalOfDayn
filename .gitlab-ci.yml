@@ -47,10 +47,11 @@ deploy:
     - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
     - chmod 400 ~/.ssh/id_rsa
   script:
-    - ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ec2-user@ec2-54-151-137-218.ap-southeast-1.compute.amazonaws.com
-    - docker ps -q --filter 'ancestor=registry.gitlab.com/dayn08/mytestwebsite' | xargs -r docker stop
-    - docker ps -a -q --filter 'ancestor=registry.gitlab.com/dayn08/mytestwebsite' | xargs -r docker rm
-    - docker pull registry.gitlab.com/dayn08/mytestwebsite
-    - docker run -d -p 8080:80 registry.gitlab.com/dayn08/mytestwebsite
+    - ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ec2-user@ec2-54-151-137-218.ap-southeast-1.compute.amazonaws.com "
+      docker ps -q --filter 'ancestor=registry.gitlab.com/frontendwebsite/daisoproject' | xargs -r docker stop && 
+      docker ps -a -q --filter 'ancestor=registry.gitlab.com/frontendwebsite/daisoproject' | xargs -r docker rm && 
+      docker pull registry.gitlab.com/frontendwebsite/daisoproject && 
+      docker run -d -p 80:80 registry.gitlab.com/frontendwebsite/daisoproject"
+
   only:
     - main
