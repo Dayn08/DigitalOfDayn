@@ -5,6 +5,7 @@ services:
 
 stages:
   - build
+  - test
   - deploy
 
 build:
@@ -21,12 +22,32 @@ build:
   only:
     - main
 
+test_ssh_connection:
+  stage: test
+  before_script: 
+    # Create the .ssh directory if it doesn't exist
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    # Add the SSH private key to the file and set permissions
+    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+    - chmod 400 ~/.ssh/id_rsa
+  script:
+    - ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ec2-user@ec2-54-151-137-218.ap-southeast-1.compute.amazonaws.com "echo 'SSH connection successful!'"
+  only:
+    - main
+
+
 deploy:
   stage: deploy
   before_script:
-    - echo "Logging into GitLab Container Registry..."
-    - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+    # Create the .ssh directory if it doesn't exist
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    # Add the SSH private key to the file and set permissions
+    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+    - chmod 400 ~/.ssh/id_rsa
   script:
+    - ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ec2-user@ec2-54-151-137-218.ap-southeast-1.compute.amazonaws.com
     - docker ps -q --filter 'ancestor=registry.gitlab.com/dayn08/mytestwebsite' | xargs -r docker stop
     - docker ps -a -q --filter 'ancestor=registry.gitlab.com/dayn08/mytestwebsite' | xargs -r docker rm
     - docker pull registry.gitlab.com/dayn08/mytestwebsite
