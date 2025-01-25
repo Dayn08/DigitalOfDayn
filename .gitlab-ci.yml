@@ -15,9 +15,9 @@ build:
   script:
     - docker --version  # Check Docker version to verify it's working
     - echo "Building Docker image..."
-    - docker build -t registry.gitlab.com/frontendwebsite/daisoproject .
+    - docker build -t registry.gitlab.com/dayn08/mytestwebsite .
     - echo "Pushing Docker image to GitLab Container Registry..."
-    - docker push registry.gitlab.com/frontendwebsite/daisoproject
+    - docker push registry.gitlab.com/dayn08/mytestwebsite
   only:
     - main
 
