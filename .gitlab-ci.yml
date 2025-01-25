@@ -1,0 +1,29 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+
+build:
+  stage: build
+  image: docker:alpine
+  services:
+    - docker:dind
+  script:
+    - echo "Logging into GitLab Container Registry..."
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - echo "Building Docker image..."
+    - docker build -t $IMAGE_TAG .
+    - echo "Pushing Docker image to GitLab Container Registry..."
+    - docker push $IMAGE_TAG
+  only:
+    - main # Adjust this branch if necessary
+
+deploy:
+  stage: deploy
+  image: alpine:alpine
+  script:
+    - echo "Image pushed to registry successfully. Deployment step goes here."
+  only:
+    - main
