@@ -25,7 +25,7 @@ deploy:
   stage: deploy
   script:
     # Stop and remove existing container, run the registry container
-    - ssh "$SSH_PRIVATE_KEY" ubuntu@ec2-54-251-195-21.ap-southeast-1.compute.amazonaws.com "
+    - ssh -i "$SSH_PRIVATE_KEY" ubuntu@ec2-54-251-195-21.ap-southeast-1.compute.amazonaws.com "
       docker ps -q --filter 'ancestor=registry.gitlab.com/dayn08/mytestwebsite' | xargs -r docker stop && 
       docker ps -a -q --filter 'ancestor=registry.gitlab.com/dayn08/mytestwebsite' | xargs -r docker rm && 
       docker pull registry.gitlab.com/dayn08/mytestwebsite && 
