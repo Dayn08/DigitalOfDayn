@@ -22,8 +22,8 @@ build:
     - main
 
 deploy:
- stage: deploy
-  before_script: 
+  stage: deploy
+  before_script:
     # Create the .ssh directory if it doesn't exist
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
