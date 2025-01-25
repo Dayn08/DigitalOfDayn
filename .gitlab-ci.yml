@@ -28,10 +28,10 @@ deploy:
     - eval $(ssh-agent -s)
     - mkdir -p ~/.ssh
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/test.pem
-    - chmod 600 ~/.ssh/test.pem
+    - chmod 400 ~/.ssh/test.pem
   script:
     # Stop and remove the existing container, pull and run the new image
-    - ssh -T -o StrictHostKeyChecking=no -i ~/.ssh/test.pem ubuntu@ec2-54-251-195-21.ap-southeast-1.compute.amazonaws.com "
+    - ssh -T -o StrictHostKeyChecking=no -i ~/.ssh/test.pem ubuntu@54.251.195.21 "
         docker ps -q --filter 'ancestor=registry.gitlab.com/dayn08/mytestwebsite' | xargs -r docker stop && 
         docker ps -a -q --filter 'ancestor=registry.gitlab.com/dayn08/mytestwebsite' | xargs -r docker rm && 
         docker pull registry.gitlab.com/dayn08/mytestwebsite && 
