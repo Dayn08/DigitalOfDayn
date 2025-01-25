@@ -26,14 +26,14 @@ deploy:
   before_script:
     # Create the .ssh directory if it doesn't exist
     - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
+    - chmod 600 ~/.ssh
     # Add the SSH private key to the file and set permissions
     - echo $SSH_PRIVATE_KEY
     - echo $SSH_PRIVATE_KEY > ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa
+    - chmod 400 ~/.ssh/id_rsa
     # Disable strict host key checking to prevent host key verification issues
     - echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
-    - chmod 644 ~/.ssh/config
+    - chmod 600 ~/.ssh/config
 
   script:
     # Stop and remove the existing container, pull and run the new image
