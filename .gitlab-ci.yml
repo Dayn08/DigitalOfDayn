@@ -50,8 +50,8 @@ deploy:
     - ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ec2-user@ec2-54-151-137-218.ap-southeast-1.compute.amazonaws.com "
       docker ps -q --filter 'ancestor=registry.gitlab.com/Dayn08/mytestwebsite' | xargs -r docker stop && 
       docker ps -a -q --filter 'ancestor=registry.gitlab.com/Dayn08/mytestwebsite' | xargs -r docker rm && 
-      docker pull registry.gitlab.com/Dayn08/mytestwebsitet && 
-      docker run -d -p 80:80 registry.gitlab.com/Dayn08/mytestwebsitet"
+      docker pull registry.gitlab.com/Dayn08/mytestwebsite && 
+      docker run -d -p 80:80 registry.gitlab.com/Dayn08/mytestwebsite"
 
   only:
     - main
