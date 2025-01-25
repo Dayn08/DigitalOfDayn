@@ -23,19 +23,9 @@ build:
 
 deploy:
   stage: deploy
-  before_script: 
-    # Create the .ssh directory if it doesn't exist
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    # Add the SSH private key to the file and set permissions
-    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa
-    # Disable strict host key checking to prevent host key verification issues
-    - echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
-    - chmod 600 ~/.ssh/config
   script:
     # Stop and remove existing container, run the registry container
-    - ssh ubuntu@54.251.195.21 "
+    - ssh "$SSH_PRIVATE_KEY" ubuntu@ec2-54-251-195-21.ap-southeast-1.compute.amazonaws.com "
       docker ps -q --filter 'ancestor=registry.gitlab.com/dayn08/mytestwebsite' | xargs -r docker stop && 
       docker ps -a -q --filter 'ancestor=registry.gitlab.com/dayn08/mytestwebsite' | xargs -r docker rm && 
       docker pull registry.gitlab.com/dayn08/mytestwebsite && 
