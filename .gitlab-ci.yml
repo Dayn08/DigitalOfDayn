@@ -31,7 +31,7 @@ deploy:
     - chmod 400 ~/.ssh/test.pem
   script:
     # Stop and remove the existing container, pull and run the new image
-    - ssh -i ~/.ssh/test.pem ubuntu@54.251.195.21 "
+    - ssh -o StrictHostKeyChecking=no -i ~/.ssh/test.pem ubuntu@54.251.195.21 "
         docker ps -q --filter 'ancestor=registry.gitlab.com/dayn08/mytestwebsite' | xargs -r docker stop && 
         docker ps -a -q --filter 'ancestor=registry.gitlab.com/dayn08/mytestwebsite' | xargs -r docker rm && 
         docker pull registry.gitlab.com/dayn08/mytestwebsite && 
