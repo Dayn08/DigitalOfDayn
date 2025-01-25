@@ -22,7 +22,7 @@ build:
     - main
 
 deploy:
-  stage: deploy
+ stage: deploy
   before_script: 
     # Create the .ssh directory if it doesn't exist
     - mkdir -p ~/.ssh
@@ -33,13 +33,14 @@ deploy:
     # Disable strict host key checking to prevent host key verification issues
     - echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
     - chmod 644 ~/.ssh/config
+    # Log into GitLab Container Registry using stored credentials
+    - echo "$CI_REGISTRY_PASSWORD" | docker login registry.gitlab.com -u "$CI_REGISTRY_USER" --password-stdin  
   script:
-    # Stop and remove existing container, run the registry container
-    - ssh ubuntu@ec2-54-251-195-21.ap-southeast-1.compute.amazonaws.com "
-      docker ps -q --filter 'ancestor=registry.gitlab.com/dayn08/mytestwebsite' | xargs -r docker stop && 
-      docker ps -a -q --filter 'ancestor=registry.gitlab.com/dayn08/mytestwebsite' | xargs -r docker rm && 
-      docker pull registry.gitlab.com/dayn08/mytestwebsite && 
-      docker run -d -p 8080:80 registry.gitlab.com/dayn08/mytestwebsite"
-
+    # Stop and remove the existing container, pull and run the new image
+    - ssh -i "$SSH_PRIVATE_KEY" ubuntu@ec2-54-251-195-21.ap-southeast-1.compute.amazonaws.com "
+        docker ps -q --filter 'ancestor=registry.gitlab.com/dayn08/mytestwebsite' | xargs -r docker stop && 
+        docker ps -a -q --filter 'ancestor=registry.gitlab.com/dayn08/mytestwebsite' | xargs -r docker rm && 
+        docker pull registry.gitlab.com/dayn08/mytestwebsite && 
+        docker run -d -p 8080:80 registry.gitlab.com/dayn08/mytestwebsite"
   only:
     - main
