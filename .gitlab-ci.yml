@@ -8,7 +8,7 @@ stages:
   - test
   - deploy
 
-build:
+build_docker_container:
   stage: build
   before_script:
     - echo "Logging into GitLab Container Registry..."
@@ -37,7 +37,7 @@ test_ssh_connection:
     - main
 
 
-deploy:
+deploy_to_aws_ec2:
   stage: deploy
   before_script:
     # Create the .ssh directory if it doesn't exist
@@ -48,10 +48,10 @@ deploy:
     - chmod 400 ~/.ssh/id_rsa
   script:
     - ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ec2-user@ec2-54-151-137-218.ap-southeast-1.compute.amazonaws.com "
-      docker ps -q --filter 'ancestor=registry.gitlab.com/Dayn08/mytestwebsite' | xargs -r docker stop && 
-      docker ps -a -q --filter 'ancestor=registry.gitlab.com/Dayn08/mytestwebsite' | xargs -r docker rm && 
-      docker pull registry.gitlab.com/Dayn08/mytestwebsite && 
-      docker run -d -p 80:80 registry.gitlab.com/Dayn08/mytestwebsite"
+      docker ps -q --filter 'ancestor=registry.gitlab.com/dayn08/mytestwebsite' | xargs -r docker stop && 
+      docker ps -a -q --filter 'ancestor=registry.gitlab.com/dayn08/mytestwebsite' | xargs -r docker rm && 
+      docker pull registry.gitlab.com/dayn08/mytestwebsite && 
+      docker run -d -p 80:80 registry.gitlab.com/dayn08/mytestwebsite"
 
   only:
     - main
