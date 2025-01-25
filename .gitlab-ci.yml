@@ -32,12 +32,10 @@ deploy:
     - chmod 400 ~/.ssh/id_rsa
     # Disable strict host key checking to prevent host key verification issues
     - echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
-    - chmod 644 ~/.ssh/config
-    # Log into GitLab Container Registry using stored credentials
-    - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY  
+    - chmod 644 ~/.ssh/config 
   script:
     # Stop and remove the existing container, pull and run the new image
-    - ssh -i "$SSH_PRIVATE_KEY" ubuntu@ec2-54-251-195-21.ap-southeast-1.compute.amazonaws.com "
+    - ssh ubuntu@ec2-54-251-195-21.ap-southeast-1.compute.amazonaws.com "
         docker ps -q --filter 'ancestor=registry.gitlab.com/dayn08/mytestwebsite' | xargs -r docker stop && 
         docker ps -a -q --filter 'ancestor=registry.gitlab.com/dayn08/mytestwebsite' | xargs -r docker rm && 
         docker pull registry.gitlab.com/dayn08/mytestwebsite && 
