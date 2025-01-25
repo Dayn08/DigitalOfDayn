@@ -30,7 +30,7 @@ deploy:
     # Add the SSH private key to the file and set permissions
     - echo $SSH_PRIVATE_KEY
     - echo $SSH_PRIVATE_KEY > ~/.ssh/id_rsa
-    - chmod 755 ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
     # Disable strict host key checking to prevent host key verification issues
     - echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
     - chmod 644 ~/.ssh/config
