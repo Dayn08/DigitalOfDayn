@@ -1,28 +1,28 @@
+image: docker:latest  # Use a Docker image that has Docker pre-installed
+
+services:
+  - docker:dind  # Docker-in-Docker service to run Docker commands
+
 stages:
   - build
   - deploy
 
-variables:
-  IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
-
 build:
   stage: build
-  image: docker:alpine
-  services:
-    - docker:dind
+  before_script:
+    - cho "Logging into GitLab Container Registry..."
+    - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
   script:
-    - echo "Logging into GitLab Container Registry..."
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker --version  # Check Docker version to verify it's working
     - echo "Building Docker image..."
-    - docker build -t $IMAGE_TAG .
+    - docker build -t registry.gitlab.com/frontendwebsite/daisoproject .
     - echo "Pushing Docker image to GitLab Container Registry..."
-    - docker push $IMAGE_TAG
+    - docker push registry.gitlab.com/frontendwebsite/daisoproject
   only:
-    - main # Adjust this branch if necessary
+    - main
 
 deploy:
   stage: deploy
-  image: alpine:alpine
   script:
     - echo "Image pushed to registry successfully. Deployment step goes here."
   only:
