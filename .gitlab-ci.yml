@@ -29,7 +29,5 @@ deploy:
     - docker ps -a -q --filter 'ancestor=registry.gitlab.com/dayn08/mytestwebsite' | xargs -r docker rm
     - docker pull registry.gitlab.com/dayn08/mytestwebsite
     - docker run -d -p 8080:80 registry.gitlab.com/dayn08/mytestwebsite
-  tags:
-    - ec2
   only:
     - main
